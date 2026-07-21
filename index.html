@@ -148,9 +148,9 @@
             responseBox.style.display = 'block';
             aiAnswerText.innerHTML = "Sedang merujuk nota silibus Maharat Al-Quran Tingkatan 1...";
 
-            // MASUKKAN KUNCI AIzaSy... ANDA DI SINI
-            const apiKey = "AQ.Ab8RN6L0ESQpsVF2zpI38x6Sm883k9um5k5JVeoabt87IBeUCg";
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+            // Kunci AQ. anda dipasang di sini dengan pengepala X-Goog-Api-Key
+            const apiKey = "AQ.Ab8RN6IplndYK5lqCLnUuciYdDmWgklN7BjZozY-xiTC8GD7Zg";
+            const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
 
             const systemPrompt = `Anda adalah Tutor AI rasmi bagi subjek Maharat Al-Quran Tingkatan 1 KSSM. Anda mesti menjawab soalan pelajar secara tepat berdasarkan nota silibus rasmi berikut:
 1. PRINSIP ILMU TAJWID: Definisi Bahasa: Al-Tahsin (memperelokkan). Istilah: Mengeluarkan huruf dari makhraj berserta Haqq dan Mustahaqq. Faedah: Melindungi lidah daripada kesalahan (lahn), mendapat keredaan Allah, dan kebahagiaan akhirat. Pengasas: Amali oleh Rasulullah SAW; Teori oleh ulama Qiraat.
@@ -176,7 +176,10 @@ Sila jawab soalan pelajar dalam Bahasa Melayu dengan jelas dan berstruktur berda
             try {
                 const response = await fetch(url, {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    headers: { 
+                        "Content-Type": "application/json",
+                        "X-Goog-Api-Key": apiKey
+                    },
                     body: JSON.stringify(payload)
                 });
 
