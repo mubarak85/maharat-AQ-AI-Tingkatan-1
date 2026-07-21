@@ -1,175 +1,59 @@
-<!DOCTYPE html>
-<html lang="ms">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tutor AI Maharat Al-Quran T1</title>
-    <style>
-        :root {
-            --primary-color: #0d5c3b;
-            --secondary-color: #f4f7f6;
-            --accent-color: #2e8b57;
+function doPost(e) {
+  try {
+    var data = JSON.parse(e.postData.contents);
+    var userQuery = data.query;
+    
+    var apiKey = "AQ.Ab8RN6LO2l2VUDiVVQ_hgKIBMc_si9PEmPG-tKrC4Ydh_Mq1Pg";
+    
+    // Tukar kepada model gemini-1.5-pro atau versi laluan terkini yang disokong
+    var url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent";
+
+    var systemPrompt = `Anda adalah Tutor AI rasmi bagi subjek Maharat Al-Quran Tingkatan 1 KSSM. Anda mesti menjawab soalan pelajar secara tepat berdasarkan nota silibus rasmi berikut:
+1. PRINSIP ILMU TAJWID: Definisi Bahasa: Al-Tahsin (memperelokkan). Istilah: Mengeluarkan huruf dari makhraj berserta Haqq dan Mustahaqq. Faedah: Melindungi lidah daripada kesalahan (lahn), mendapat keredaan Allah, dan kebahagiaan akhirat. Pengasas: Amali oleh Rasulullah SAW; Teori oleh ulama Qiraat.
+2. HUKUM BELAJAR & AMAL: Teori: Fardhu Kifayah. Amali: Fardhu Ain. Dalil: Surah Al-Muzzammil ayat 4 & Hadis riwayat Ahmad.
+3. KESILAPAN (AL-LAHN): Al-Lahn Al-Jali (Kesalahan nyata mencacatkan lafaz - Haram/berdosa), Al-Lahn Al-Khafi (Kesalahan tersembunyi pada hukum halus - Makruh).
+4. PERINGKAT BACAAN: Al-Tahqiq (perlahan & teliti), Al-Tartil (tadabbur), Al-Tadwir (sederhana), Al-Hadr (pantas tetapi jaga tajwid).
+5. ISTI'ADAH & BASMALAH: Isti'adhah (4 cara di awal surah & 2 wajah di awal Surah Al-Tawbah). Basmalah (Wajib di awal setiap surah kecuali Al-Tawbah).
+6. NUN SAKINAH & TANWIN: Izhar Halqi (6 huruf), Idgham (Bighunnah & Bila Ghunnah) + Izhar Mutlaq, Iqlab, Ikhfa' Haqiqi.
+7. DEFINISI & KELEBIHAN AL-QURAN: Kalam Allah yang mukjizat, diturunkan kepada Nabi Muhammad SAW, ibadah membacanya, mutawatir. Kelebihan: Sebaik-baik manusia adalah yang belajar & mengajarnya.
+
+Sila jawab soalan pelajar dalam Bahasa Melayu dengan jelas dan berstruktur berdasarkan fakta di atas.`;
+
+    var payload = {
+      contents: [
+        {
+          parts: [
+            { text: systemPrompt + "\n\nSoalan Pelajar: " + userQuery }
+          ]
         }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--secondary-color);
-            margin: 0;
-            padding: 0;
-            color: #333;
-        }
-        header {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 1.5rem;
-            text-align: center;
-        }
-        .container {
-            max-width: 600px;
-            margin: 20px auto;
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            font-size: 0.9rem;
-        }
-        textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            box-sizing: border-box;
-            font-size: 1rem;
-        }
-        .btn-group {
-            display: flex;
-            gap: 10px;
-        }
-        button {
-            background-color: var(--accent-color);
-            color: white;
-            border: none;
-            padding: 12px 15px;
-            border-radius: 6px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            flex: 1;
-            transition: opacity 0.3s;
-        }
-        button.mic-btn {
-            background-color: #d9534f;
-        }
-        button:hover {
-            opacity: 0.9;
-        }
-        .response-box {
-            margin-top: 20px;
-            padding: 15px;
-            background: #e8f4ed;
-            border-left: 4px solid var(--accent-color);
-            border-radius: 4px;
-            display: none;
-            line-height: 1.6;
-            white-space: pre-wrap;
-        }
-    </style>
-</head>
-<body>
+      ]
+    };
 
-    <header>
-        <h1>Tutor AI Maharat T1</h1>
-        <p>Tanya Soalan Melalui Teks atau Suara</p>
-    </header>
+    var options = {
+      method: "post",
+      contentType: "application/json",
+      headers: {
+        "x-goog-api-key": apiKey
+      },
+      payload: JSON.stringify(payload),
+      muteHttpExceptions: true
+    };
 
-    <div class="container">
-        <div class="form-group">
-            <label for="userQuery">Taip soalan atau gunakan mikrofon:</label>
-            <textarea id="userQuery" rows="4" placeholder="Contoh: Apakah definisi ilmu tajwid mengikut istilah?"></textarea>
-        </div>
+    var response = UrlFetchApp.fetch(url, options);
+    var jsonResponse = JSON.parse(response.getContentText());
+    
+    var reply = "Maaf, tiada jawapan yang dapat dijana buat masa ini.";
+    if (jsonResponse.candidates && jsonResponse.candidates[0].content.parts[0].text) {
+      reply = jsonResponse.candidates[0].content.parts[0].text;
+    } else if (jsonResponse.error) {
+      reply = "Ralat Google AI: " + jsonResponse.error.message;
+    }
 
-        <div class="btn-group">
-            <button class="mic-btn" onclick="startSpeechRecognition()">🎙️ Cakap (Suara)</button>
-            <button onclick="askAI()">Hantar Soalan</button>
-        </div>
+    return ContentService.createTextOutput(JSON.stringify({ result: reply }))
+      .setMimeType(ContentService.MimeType.JSON);
 
-        <div id="responseBox" class="response-box">
-            <strong>Jawapan Tutor AI:</strong>
-            <p id="aiAnswerText">Sedang berfikir...</p>
-        </div>
-    </div>
-
-    <script>
-        function startSpeechRecognition() {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (!SpeechRecognition) {
-                alert('Pelayar web anda tidak menyokong fungsi pengecaman suara. Sila guna Google Chrome.');
-                return;
-            }
-
-            const recognition = new SpeechRecognition();
-            recognition.lang = 'ms-MY';
-            recognition.interimResults = false;
-
-            recognition.onstart = function() {
-                document.getElementById('userQuery').placeholder = "Sila bercakap sekarang...";
-            };
-
-            recognition.onresult = function(event) {
-                const speechToText = event.results[0][0].transcript;
-                document.getElementById('userQuery').value = speechToText;
-                document.getElementById('userQuery').placeholder = "Taip soalan atau gunakan mikrofon...";
-            };
-
-            recognition.onerror = function(event) {
-                alert('Ralat pengecaman suara: ' + event.error);
-            };
-
-            recognition.start();
-        }
-
-        async function askAI() {
-            const query = document.getElementById('userQuery').value;
-            const responseBox = document.getElementById('responseBox');
-            const aiAnswerText = document.getElementById('aiAnswerText');
-
-            if (!query.trim()) {
-                alert('Sila taip atau cakap soalan anda dahulu.');
-                return;
-            }
-
-            responseBox.style.display = 'block';
-            aiAnswerText.innerHTML = "Sedang merujuk nota silibus Maharat Al-Quran Tingkatan 1...";
-
-            // URL Web App Google Apps Script anda yang telah disatukan
-            const scriptURL = "https://script.google.com/macros/s/AKfycbyd0HkWBMeokMN3exkbPU3KGt6B28YmhG5IZuxtwCMz8B9C4j39cZl0TMgl6qJ5J8BV/exec";
-
-            try {
-                const response = await fetch(scriptURL, {
-                    method: "POST",
-                    body: JSON.stringify({ query: query })
-                });
-
-                const data = await response.json();
-                
-                if (data.result) {
-                    aiAnswerText.innerHTML = data.result;
-                } else {
-                    aiAnswerText.innerHTML = "Maaf, tiada jawapan yang dapat dijana buat masa ini.";
-                }
-
-            } catch (error) {
-                aiAnswerText.innerHTML = "Ralat sambungan rangkaian ke pelayan Apps Script.";
-            }
-        }
-    </script>
-
-</body>
-</html>
+  } catch (error) {
+    return ContentService.createTextOutput(JSON.stringify({ result: "Ralat Pelayan: " + error.toString() }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
