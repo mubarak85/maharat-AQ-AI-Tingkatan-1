@@ -148,24 +148,50 @@
             responseBox.style.display = 'block';
             aiAnswerText.innerHTML = "Sedang merujuk nota silibus Maharat Al-Quran Tingkatan 1...";
 
-            const scriptURL = "https://script.google.com/macros/s/AKfycbyd0HkWBMeokMN3exkbPU3KGt6B28YmhG5IZuxtwCMz8B9C4j39cZl0TMgl6qJ5J8BV/exec";
+            // MASUKKAN KUNCI AIzaSy... ANDA DI SINI
+            const apiKey = "AQ.Ab8RN6L0ESQpsVF2zpI38x6Sm883k9um5k5JVeoabt87IBeUCg";
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+
+            const systemPrompt = `Anda adalah Tutor AI rasmi bagi subjek Maharat Al-Quran Tingkatan 1 KSSM. Anda mesti menjawab soalan pelajar secara tepat berdasarkan nota silibus rasmi berikut:
+1. PRINSIP ILMU TAJWID: Definisi Bahasa: Al-Tahsin (memperelokkan). Istilah: Mengeluarkan huruf dari makhraj berserta Haqq dan Mustahaqq. Faedah: Melindungi lidah daripada kesalahan (lahn), mendapat keredaan Allah, dan kebahagiaan akhirat. Pengasas: Amali oleh Rasulullah SAW; Teori oleh ulama Qiraat.
+2. HUKUM BELAJAR & AMAL: Teori: Fardhu Kifayah. Amali: Fardhu Ain. Dalil: Surah Al-Muzzammil ayat 4 & Hadis riwayat Ahmad.
+3. KESILAPAN (AL-LAHN): Al-Lahn Al-Jali (Kesalahan nyata mencacatkan lafaz - Haram/berdosa), Al-Lahn Al-Khafi (Kesalahan tersembunyi pada hukum halus - Makruh).
+4. PERINGKAT BACAAN: Al-Tahqiq (perlahan & teliti), Al-Tartil (tadabbur), Al-Tadwir (sederhana), Al-Hadr (pantas tetapi jaga tajwid).
+5. ISTI'ADAH & BASMALAH: Isti'adhah (4 cara di awal surah & 2 wajah di awal Surah Al-Tawbah). Basmalah (Wajib di awal setiap surah kecuali Al-Tawbah).
+6. NUN SAKINAH & TANWIN: Izhar Halqi (6 huruf), Idgham (Bighunnah & Bila Ghunnah) + Izhar Mutlaq, Iqlab, Ikhfa' Haqiqi.
+7. DEFINISI & KELEBIHAN AL-QURAN: Kalam Allah yang mukjizat, diturunkan kepada Nabi Muhammad SAW, ibadah membacanya, mutawatir. Kelebihan: Sebaik-baik manusia adalah yang belajar & mengajarnya.
+
+Sila jawab soalan pelajar dalam Bahasa Melayu dengan jelas dan berstruktur berdasarkan fakta di atas.`;
+
+            const payload = {
+                contents: [
+                    {
+                        parts: [
+                            { text: systemPrompt + "\n\nSoalan Pelajar: " + query }
+                        ]
+                    }
+                ]
+            };
 
             try {
-                const response = await fetch(scriptURL, {
+                const response = await fetch(url, {
                     method: "POST",
-                    body: JSON.stringify({ query: query })
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
                 });
 
                 const data = await response.json();
                 
-                if (data.result) {
-                    aiAnswerText.innerHTML = data.result;
+                if (data.candidates && data.candidates[0].content.parts[0].text) {
+                    aiAnswerText.innerHTML = data.candidates[0].content.parts[0].text;
+                } else if (data.error) {
+                    aiAnswerText.innerHTML = "Ralat Google AI: " + data.error.message;
                 } else {
-                    aiAnswerText.innerHTML = "Maaf, tiada jawapan yang dapat dijana buat masa ini.";
+                    aiAnswerText.innerHTML = "Maaf, tiada jawapan yang dapat dijana.";
                 }
 
             } catch (error) {
-                aiAnswerText.innerHTML = "Ralat sambungan rangkaian ke pelayan Apps Script.";
+                aiAnswerText.innerHTML = "Ralat sambungan rangkaian.";
             }
         }
     </script>
