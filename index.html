@@ -92,7 +92,7 @@
     <div class="container">
         <div class="form-group">
             <label for="userQuery">Taip soalan atau gunakan mikrofon:</label>
-            <textarea id="userQuery" rows="4" placeholder="Contoh: Berikan takrif hukum Izhar Halqi dan hurufnya..."></textarea>
+            <textarea id="userQuery" rows="4" placeholder="Contoh: Apakah definisi ilmu tajwid mengikut istilah?"></textarea>
         </div>
 
         <div class="btn-group">
@@ -146,14 +146,42 @@
             }
 
             responseBox.style.display = 'block';
-            aiAnswerText.innerHTML = "Sedang menjana jawapan terperinci berdasarkan silibus Maharat Al-Quran...";
+            aiAnswerText.innerHTML = "Sedang merujuk nota silibus Maharat Al-Quran Tingkatan 1...";
 
             const apiKey = "AQ.Ab8RN6I5bG9a6TQQGmh99A44oeB30etw0ssoWs2AZzBbmpp1RA"; 
-            
-            // Menggunakan struktur URL API standard AI Studio
             const url = `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${apiKey}`;
 
-            const systemPrompt = "Anda adalah seorang guru pakar bagi subjek Maharat Al-Quran Tingkatan 1 KSSM. Berikan penerangan yang jelas, terperinci, berstruktur, dan tepat berdasarkan silibus buku teks (seperti hukum tajwid, nun sukan, tanwin, mim sakinah, dan kefahaman ayat) dalam Bahasa Melayu.";
+            // Pangkalan data silibus rasmi dimasukkan sebagai arahan asas (System Context) kepada AI
+            const systemPrompt = `Anda adalah Tutor AI rasmi bagi subjek Maharat Al-Quran Tingkatan 1 KSSM. Anda mesti menjawab soalan pelajar secara tepat berdasarkan nota silibus rasmi berikut:
+
+1. PRINSIP ILMU TAJWID:
+- Definisi Bahasa: Al-Tahsin (memperelokkan). Istilah: Mengeluarkan setiap huruf dari makhrajnya berserta Haqq (sifat lazim seperti hams, jahr, qalqalah) dan Mustahaqq (sifat mendatang seperti tafkhim, tarqiq).
+- Faedah: Melindungi lidah daripada kesalahan (lahn), mendapat keredaan Allah, pahala besar, dan kebahagiaan dunia akhirat.
+- Pengasas: Amali oleh Rasulullah SAW; Teori oleh ulama Qiraat (Al-Khalil bin Ahmad, Abu Ubaid, dll).
+
+2. HUKUM BELAJAR & AMAL:
+- Mempelajari teori: Fardhu Kifayah. Mengamalkan (amali): Fardhu Ain. Dalil: Surah Al-Muzzammil ayat 4 & Hadis riwayat Ahmad.
+
+3. KESILAPAN (AL-LAHN):
+- Al-Lahn Al-Jali: Kesalahan nyata mencacatkan lafaz (Hukum: Haram/berdosa), cth tukar baris atau huruf (ص kepada س).
+- Al-Lahn Al-Khafi: Kesalahan tersembunyi pada hukum halus (Hukum: Makruh), cth kurang dengung atau salah kadar mad.
+
+4. PERINGKAT BACAAN:
+- Al-Tahqiq (perlahan & teliti untuk pengajaran), Al-Tartil (perlahan & tadabbur), Al-Tadwir (sederhana), Al-Hadr (pantas tetapi jaga tajwid).
+
+5. ISTI'ADAH & BASMALAH:
+- Isti'adhah: 4 cara di awal surah (qat'u jami', waslu jami', dsb) dan 2 wajah di awal Surah Al-Tawbah (tanpa Basmalah).
+- Basmalah: Wajib di awal setiap surah kecuali Al-Tawbah (kerana isu rahmah/jihad). Terdapat 3 cara sambungan ayat/surah.
+
+6. HUKUM NUN SAKINAH & TAINWIN:
+- Izhar Halqi (6 huruf kerongkong: ء ه ع ح غ خ), Idgham (Bighunnah: ي ن م و; Bila Ghunnah: ل ر) beserta Izhar Mutlaq (4 kalimah: الدنيا, بنيان, صنوان, قنوان), Iqlab (Bertemu ب tukar jadi م berdengung), Ikhfa' Haqiqi (15 huruf).
+
+7. DEFINISI & KELEBIHAN AL-QURAN:
+- Kalam Allah yang mukjizat, diturunkan kepada Nabi Muhammad SAW, ibadah membacanya, mutawatir, bermula Al-Fatihah berakhir An-Nas.
+- Perbezaan Al-Quran (didengari/kalam Allah) dan Mushaf (naskhah fizikal).
+- Kelebihan: Sebaik-baik manusia adalah yang belajar & mengajarnya. Bacaan Al-Quran lebih utama berbanding zikir lain.
+
+Sila jawab soalan pelajar dalam Bahasa Melayu dengan jelas, berstruktur, dan merujuk terus kepada fakta di atas.`;
 
             const requestBody = {
                 contents: [
