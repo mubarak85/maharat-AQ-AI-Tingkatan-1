@@ -148,10 +148,10 @@
             responseBox.style.display = 'block';
             aiAnswerText.innerHTML = "Sedang menjana jawapan terperinci berdasarkan silibus Maharat Al-Quran...";
 
-            // Kunci API yang telah digabungkan
             const apiKey = "AQ.Ab8RN6I5bG9a6TQQGmh99A44oeB30etw0ssoWs2AZzBbmpp1RA"; 
-
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+            
+            // Menggunakan struktur URL API standard AI Studio
+            const url = `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${apiKey}`;
 
             const systemPrompt = "Anda adalah seorang guru pakar bagi subjek Maharat Al-Quran Tingkatan 1 KSSM. Berikan penerangan yang jelas, terperinci, berstruktur, dan tepat berdasarkan silibus buku teks (seperti hukum tajwid, nun sukan, tanwin, mim sakinah, dan kefahaman ayat) dalam Bahasa Melayu.";
 
@@ -177,7 +177,7 @@
                 const data = await response.json();
                 
                 if (data.error) {
-                    aiAnswerText.innerHTML = "Ralat API: " + (data.error.message || "Kunci API tidak sah.");
+                    aiAnswerText.innerHTML = "Ralat API: " + (data.error.message || "Gagal mengesahkan kunci.");
                     return;
                 }
 
