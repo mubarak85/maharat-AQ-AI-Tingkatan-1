@@ -149,9 +149,10 @@
             aiAnswerText.innerHTML = "Sedang merujuk nota silibus Maharat Al-Quran Tingkatan 1...";
 
             const apiKey = "AQ.Ab8RN6I5bG9a6TQQGmh99A44oeB30etw0ssoWs2AZzBbmpp1RA"; 
-            const url = `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${apiKey}`;
+            
+            // Menggunakan model gemini-1.5-flash dengan endpoint v1beta yang serasi dengan API Key
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
-            // Pangkalan data silibus rasmi dimasukkan sebagai arahan asas (System Context) kepada AI
             const systemPrompt = `Anda adalah Tutor AI rasmi bagi subjek Maharat Al-Quran Tingkatan 1 KSSM. Anda mesti menjawab soalan pelajar secara tepat berdasarkan nota silibus rasmi berikut:
 
 1. PRINSIP ILMU TAJWID:
