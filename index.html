@@ -148,13 +148,8 @@
             responseBox.style.display = 'block';
             aiAnswerText.innerHTML = "Sedang menjana jawapan terperinci berdasarkan silibus Maharat Al-Quran...";
 
-            // MASUKKAN KUNCI API ANDA DI SINI
+            // Kunci API yang telah digabungkan
             const apiKey = "AQ.Ab8RN6I5bG9a6TQQGmh99A44oeB30etw0ssoWs2AZzBbmpp1RA"; 
-            
-            if (apiKey === "REPLACE_WITH_YOUR_GEMINI_API_KEY") {
-                aiAnswerText.innerHTML = "Sila masukkan kunci API Gemini anda di dalam kod sumber fail JavaScript untuk mengaktifkan fungsi penuh.";
-                return;
-            }
 
             const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
@@ -181,6 +176,11 @@
 
                 const data = await response.json();
                 
+                if (data.error) {
+                    aiAnswerText.innerHTML = "Ralat API: " + (data.error.message || "Kunci API tidak sah.");
+                    return;
+                }
+
                 if (data.candidates && data.candidates[0].content.parts[0].text) {
                     aiAnswerText.innerHTML = data.candidates[0].content.parts[0].text;
                 } else {
