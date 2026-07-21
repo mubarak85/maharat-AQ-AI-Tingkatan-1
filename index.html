@@ -77,7 +77,8 @@
             border-left: 4px solid var(--accent-color);
             border-radius: 4px;
             display: none;
-            line-height: 1.5;
+            line-height: 1.6;
+            white-space: pre-wrap;
         }
     </style>
 </head>
@@ -91,7 +92,7 @@
     <div class="container">
         <div class="form-group">
             <label for="userQuery">Taip soalan atau gunakan mikrofon:</label>
-            <textarea id="userQuery" rows="4" placeholder="Contoh: Apakah maksud hukum Ikhfa' Syafawi?"></textarea>
+            <textarea id="userQuery" rows="4" placeholder="Contoh: Apakah maksud hukum Izhar?"></textarea>
         </div>
 
         <div class="btn-group">
@@ -101,12 +102,11 @@
 
         <div id="responseBox" class="response-box">
             <strong>Jawapan Tutor AI:</strong>
-            <p id="aiAnswerText">Menunggu pertanyaan...</p>
+            <p id="aiAnswerText">Sedang berfikir...</p>
         </div>
     </div>
 
     <script>
-        // Fungsi untuk menukar suara kepada teks (Speech-to-Text)
         function startSpeechRecognition() {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (!SpeechRecognition) {
@@ -115,7 +115,7 @@
             }
 
             const recognition = new SpeechRecognition();
-            recognition.lang = 'ms-MY'; // Bahasa Melayu
+            recognition.lang = 'ms-MY';
             recognition.interimResults = false;
 
             recognition.onstart = function() {
@@ -135,8 +135,7 @@
             recognition.start();
         }
 
-        // Fungsi simulasi jawapan (Boleh disambungkan ke API AI kemudian)
-        function askAI() {
+        async function askAI() {
             const query = document.getElementById('userQuery').value;
             const responseBox = document.getElementById('responseBox');
             const aiAnswerText = document.getElementById('aiAnswerText');
@@ -147,11 +146,29 @@
             }
 
             responseBox.style.display = 'block';
-            aiAnswerText.innerHTML = "Sedang memproses jawapan berdasarkan silibus Maharat Al-Quran...";
+            aiAnswerText.innerHTML = "Sedang mencari jawapan berdasarkan silibus Maharat Al-Quran...";
 
-            setTimeout(() => {
-                aiAnswerText.innerHTML = `Berdasarkan silibus Maharat Al-Quran Tingkatan 1, soalan berkaitan <b>"${query}"</b> merujuk kepada kefahaman topik asas tajwid dan nota pembelajaran. (Fungsi API AI penuh boleh diintegrasikan di sini).`;
-            }, 1000);
+            try {
+                // Di sini kita boleh sambungkan kepada fungsi API AI sebenar anda
+                // Sebagai alternatif percubaan web murni, anda boleh masukkan kunci API atau sambungkan ke backend percuma.
+                
+                // Jawapan pintar sementara berasaskan konteks silibus T1:
+                let simulatedSmartAnswer = "";
+                const qLower = query.toLowerCase();
+
+                if (qLower.includes("izhar")) {
+                    simulatedSmartAnswer = "Hukum Izhar (dalam tajwid Tingkatan 1) bermaksud melahirkan atau menjelaskan sebutan huruf Nun Sukun (نْ) atau Tanwin (ً ٍ ْ) apabila bertemu dengan salah satu huruf Halqi (kerongkong) tanpa dengung. Hurufnya ada 6 iaitu: ء, ه, ح, خ, ع, غ.";
+                } else if (qLower.includes("ikhfa")) {
+                    simulatedSmartAnswer = "Hukum Ikhfa' bermaksud menyembunyikan atau menyamarkan sebutan Nun Sukun (نْ) atau Tanwin antara jelas dan dengung apabila bertemu dengan 15 huruf Ikhfa' Haqiqi.";
+                } else {
+                    simulatedSmartAnswer = `Berdasarkan silibus Maharat Al-Quran Tingkatan 1, berkaitan "${query}": Sila pastikan nota tajuk ini merujuk kepada bab hukum nun sakinah, tanwin, mim sakinah, atau kefahaman ayat di dalam buku teks rasmi.`;
+                }
+
+                aiAnswerText.innerHTML = simulatedSmartAnswer;
+
+            } catch (error) {
+                aiAnswerText.innerHTML = "Maaf, berlaku ralat semasa memproses jawapan.";
+            }
         }
     </script>
 
