@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutor AI Maharat Al-Quran T1</title>
+    <style>
+        :root {
+            --primary-color: #0d5c3b;
+            --secondary-color: #f4f7f6;
+            --accent-color: #2e8b57;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--secondary-color);
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+        .btn-group {
+            display: flex;
+            gap: 10px;
+        }
+        button {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 12px 15px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            flex: 1;
+            transition: opacity 0.3s;
+        }
+        button.mic-btn {
+            background-color: #d9534f;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        .response-box {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e8f4ed;
+            border-left: 4px solid var(--accent-color);
+            border-radius: 4px;
+            display: none;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Tutor AI Maharat T1</h1>
+        <p>Tanya Soalan Melalui Teks atau Suara</p>
+    </header>
+
+    <div class="container">
+        <div class="form-group">
+            <label for="userQuery">Taip soalan atau gunakan mikrofon:</label>
+            <textarea id="userQuery" rows="4" placeholder="Contoh: Apakah maksud hukum Ikhfa' Syafawi?"></textarea>
+        </div>
+
+        <div class="btn-group">
+            <button class="mic-btn" onclick="startSpeechRecognition()">🎙️ Cakap (Suara)</button>
+            <button onclick="askAI()">Hantar Soalan</button>
+        </div>
+
+        <div id="responseBox" class="response-box">
+            <strong>Jawapan Tutor AI:</strong>
+            <p id="aiAnswerText">Menunggu pertanyaan...</p>
+        </div>
+    </div>
+
+    <script>
+        // Fungsi untuk menukar suara kepada teks (Speech-to-Text)
+        function startSpeechRecognition() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                alert('Pelayar web anda tidak menyokong fungsi pengecaman suara. Sila guna Google Chrome.');
+                return;
+            }
+
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'ms-MY'; // Bahasa Melayu
+            recognition.interimResults = false;
+
+            recognition.onstart = function() {
+                document.getElementById('userQuery').placeholder = "Sila bercakap sekarang...";
+            };
+
+            recognition.onresult = function(event) {
+                const speechToText = event.results[0][0].transcript;
+                document.getElementById('userQuery').value = speechToText;
+                document.getElementById('userQuery').placeholder = "Taip soalan atau gunakan mikrofon...";
+            };
+
+            recognition.onerror = function(event) {
+                alert('Ralat pengecaman suara: ' + event.error);
+            };
+
+            recognition.start();
+        }
+
+        // Fungsi simulasi jawapan (Boleh disambungkan ke API AI kemudian)
+        function askAI() {
+            const query = document.getElementById('userQuery').value;
+            const responseBox = document.getElementById('responseBox');
+            const aiAnswerText = document.getElementById('aiAnswerText');
+
+            if (!query.trim()) {
+                alert('Sila taip atau cakap soalan anda dahulu.');
+                return;
+            }
+
+            responseBox.style.display = 'block';
+            aiAnswerText.innerHTML = "Sedang memproses jawapan berdasarkan silibus Maharat Al-Quran...";
+
+            setTimeout(() => {
+                aiAnswerText.innerHTML = `Berdasarkan silibus Maharat Al-Quran Tingkatan 1, soalan berkaitan <b>"${query}"</b> merujuk kepada kefahaman topik asas tajwid dan nota pembelajaran. (Fungsi API AI penuh boleh diintegrasikan di sini).`;
+            }, 1000);
+        }
+    </script>
+
+</body>
+</html>
