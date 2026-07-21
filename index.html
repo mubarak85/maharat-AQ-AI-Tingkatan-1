@@ -92,7 +92,7 @@
     <div class="container">
         <div class="form-group">
             <label for="userQuery">Taip soalan atau gunakan mikrofon:</label>
-            <textarea id="userQuery" rows="4" placeholder="Contoh: Apakah maksud hukum Izhar?"></textarea>
+            <textarea id="userQuery" rows="4" placeholder="Contoh: Berikan takrif hukum Izhar Halqi dan hurufnya..."></textarea>
         </div>
 
         <div class="btn-group">
@@ -146,28 +146,49 @@
             }
 
             responseBox.style.display = 'block';
-            aiAnswerText.innerHTML = "Sedang mencari jawapan berdasarkan silibus Maharat Al-Quran...";
+            aiAnswerText.innerHTML = "Sedang menjana jawapan terperinci berdasarkan silibus Maharat Al-Quran...";
+
+            // MASUKKAN KUNCI API ANDA DI SINI
+            const apiKey = "AQ.Ab8RN6I5bG9a6TQQGmh99A44oeB30etw0ssoWs2AZzBbmpp1RA"; 
+            
+            if (apiKey === "REPLACE_WITH_YOUR_GEMINI_API_KEY") {
+                aiAnswerText.innerHTML = "Sila masukkan kunci API Gemini anda di dalam kod sumber fail JavaScript untuk mengaktifkan fungsi penuh.";
+                return;
+            }
+
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+
+            const systemPrompt = "Anda adalah seorang guru pakar bagi subjek Maharat Al-Quran Tingkatan 1 KSSM. Berikan penerangan yang jelas, terperinci, berstruktur, dan tepat berdasarkan silibus buku teks (seperti hukum tajwid, nun sukan, tanwin, mim sakinah, dan kefahaman ayat) dalam Bahasa Melayu.";
+
+            const requestBody = {
+                contents: [
+                    {
+                        parts: [
+                            { text: systemPrompt + "\n\nSoalan Pelajar: " + query }
+                        ]
+                    }
+                ]
+            };
 
             try {
-                // Di sini kita boleh sambungkan kepada fungsi API AI sebenar anda
-                // Sebagai alternatif percubaan web murni, anda boleh masukkan kunci API atau sambungkan ke backend percuma.
-                
-                // Jawapan pintar sementara berasaskan konteks silibus T1:
-                let simulatedSmartAnswer = "";
-                const qLower = query.toLowerCase();
+                const response = await fetch(url, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(requestBody)
+                });
 
-                if (qLower.includes("izhar")) {
-                    simulatedSmartAnswer = "Hukum Izhar (dalam tajwid Tingkatan 1) bermaksud melahirkan atau menjelaskan sebutan huruf Nun Sukun (نْ) atau Tanwin (ً ٍ ْ) apabila bertemu dengan salah satu huruf Halqi (kerongkong) tanpa dengung. Hurufnya ada 6 iaitu: ء, ه, ح, خ, ع, غ.";
-                } else if (qLower.includes("ikhfa")) {
-                    simulatedSmartAnswer = "Hukum Ikhfa' bermaksud menyembunyikan atau menyamarkan sebutan Nun Sukun (نْ) atau Tanwin antara jelas dan dengung apabila bertemu dengan 15 huruf Ikhfa' Haqiqi.";
+                const data = await response.json();
+                
+                if (data.candidates && data.candidates[0].content.parts[0].text) {
+                    aiAnswerText.innerHTML = data.candidates[0].content.parts[0].text;
                 } else {
-                    simulatedSmartAnswer = `Berdasarkan silibus Maharat Al-Quran Tingkatan 1, berkaitan "${query}": Sila pastikan nota tajuk ini merujuk kepada bab hukum nun sakinah, tanwin, mim sakinah, atau kefahaman ayat di dalam buku teks rasmi.`;
+                    aiAnswerText.innerHTML = "Maaf, tiada jawapan yang dapat dijana buat masa ini.";
                 }
 
-                aiAnswerText.innerHTML = simulatedSmartAnswer;
-
             } catch (error) {
-                aiAnswerText.innerHTML = "Maaf, berlaku ralat semasa memproses jawapan.";
+                aiAnswerText.innerHTML = "Ralat sambungan rangkaian ke pelayan AI.";
             }
         }
     </script>
