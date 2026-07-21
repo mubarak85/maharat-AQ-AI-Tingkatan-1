@@ -150,8 +150,8 @@
 
             const apiKey = "AQ.Ab8RN6I5bG9a6TQQGmh99A44oeB30etw0ssoWs2AZzBbmpp1RA"; 
             
-            // Menggunakan model gemini-1.5-flash dengan endpoint v1beta yang serasi dengan API Key
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+            // URL tanpa parameter ?key=
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent`;
 
             const systemPrompt = `Anda adalah Tutor AI rasmi bagi subjek Maharat Al-Quran Tingkatan 1 KSSM. Anda mesti menjawab soalan pelajar secara tepat berdasarkan nota silibus rasmi berikut:
 
@@ -198,7 +198,8 @@ Sila jawab soalan pelajar dalam Bahasa Melayu dengan jelas, berstruktur, dan mer
                 const response = await fetch(url, {
                     method: "POST",
                     headers: {
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
+                        "x-goog-api-key": apiKey // Kunci dihantar melalui header x-goog-api-key
                     },
                     body: JSON.stringify(requestBody)
                 });
